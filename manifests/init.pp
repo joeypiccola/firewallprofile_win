@@ -61,19 +61,19 @@ class firewallprofile_win (
 
   registry_value { 'HLMM\CurrentControl\SetServices\SharedAccess\Parameters\FirewallPolicy\StandardProfile\EnableFirewall':
     ensure => present,
-    type   => string,
+    type   => dword,
     data   => $standard_profile_value,
   }
   
   registry_value { 'HLMM\CurrentControl\SetServices\SharedAccess\Parameters\FirewallPolicy\DomainProfile\EnableFirewall':
     ensure => present,
-    type   => string,
+    type   => dword,
     data   => $domain_profile_value,
   }
 
   registry_value { 'HLMM\CurrentControl\SetServices\SharedAccess\Parameters\FirewallPolicy\PublicProfile\EnableFirewall':
     ensure => present,
-    type   => string,
+    type   => dword,
     data   => $public_profile_value,
   }
 
