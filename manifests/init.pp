@@ -34,7 +34,7 @@ class firewallprofile_win (
   $domain_profile      = 'enabled',
   $public_profile      = 'enabled',
   $service_status      = 'running',
-  $service_starup_type = 'automatic',
+  $service_startup_type = 'automatic',
 
 ){
 
