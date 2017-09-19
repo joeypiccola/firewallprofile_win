@@ -84,19 +84,19 @@ class firewallprofile_win (
   registry_value { 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\EnableFirewall':
     ensure => present,
     type   => dword,
-    data   => $standard_profile_value,
+    data   => $standard_profile_data,
   }
   
   registry_value { 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\EnableFirewall':
     ensure => present,
     type   => dword,
-    data   => $domain_profile_value,
+    data   => $domain_profile_data,
   }
 
   registry_value { 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\EnableFirewall':
     ensure => present,
     type   => dword,
-    data   => $public_profile_value,
+    data   => $public_profile_data,
   }
 
   service { 'Windows_firewall':
