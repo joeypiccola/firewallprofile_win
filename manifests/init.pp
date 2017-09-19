@@ -59,19 +59,19 @@ class firewallprofile_win (
     $public_profile_value = 1
   }
 
-  registry_value { 'HKLM\System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\EnableFirewall':
+  registry_value { 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\EnableFirewall':
     ensure => present,
     type   => dword,
     data   => $standard_profile_value,
   }
   
-  registry_value { 'HKLM\System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\EnableFirewall':
+  registry_value { 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\EnableFirewall':
     ensure => present,
     type   => dword,
     data   => $domain_profile_value,
   }
 
-  registry_value { 'HKLM\System\CurrentControlSetServices\SharedAccess\Parameters\FirewallPolicy\PublicProfile\EnableFirewall':
+  registry_value { 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\EnableFirewall':
     ensure => present,
     type   => dword,
     data   => $public_profile_value,
