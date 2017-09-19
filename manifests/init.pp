@@ -30,10 +30,11 @@
 #
 class firewallprofile_win (
 
-  $standard_profile = 'enabled',
-  $domain_profile   = 'enabled',
-  $public_profile   = 'enabled',
-  $service_state    = 'running'
+  $standard_profile    = 'enabled',
+  $domain_profile      = 'enabled',
+  $public_profile      = 'enabled',
+  $service_status      = 'running',
+  $service_starup_type = 'automatic',
 
 ){
 
@@ -41,7 +42,13 @@ class firewallprofile_win (
   validate_re($standard_profile,['^(enabled|disabled)$'])
   validate_re($domain_profile,['^(enabled|disabled)$'])
   validate_re($public_profile,['^(enabled|disabled)$'])
-  validate_re($service_state,['^(running|stopped)$'])
+  validate_re($service_status,['^(running|stopped)$'])
+  validate_re($service_startup_type,['^(automatic|disabled)$'])
+
+  if $service_startup_type == 'disabled'  {
+    notice ( "service_startup_type is $service_startup_type, overriding service_status to $service_status" )
+    $service_status = 'stopped'
+  }      
 
   case $standard_profile {
     'disabled': {
@@ -70,16 +77,14 @@ class firewallprofile_win (
 	}
   }
   
-  /*
-  case $service_state {
-    'stopped': {
+  case $service_startup_type {
+    'disabled': {
       $enabled = false
 	}
 	default: {
       $enabled = true
 	}
   }
-  */
 
   registry_value { 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\EnableFirewall':
     ensure => present,
@@ -99,19 +104,28 @@ class firewallprofile_win (
     data   => $public_profile_data,
   }
 
+  service { 'Windows_firewall':
+    ensure => $service_status,
+    name   => 'MpsSvc',
+    enable => $enabled
+  }
+
+ /*
   # if the service is true then ensure the service is running and enabled
   # if the service is false, simply ensure it's stopped and not disabled (disabling this service is bad form)
-  if $service_state {
+  if $service_status == 'started' {
     service { 'Windows_firewall':
-      ensure => $service_state,
+      ensure => $service_status,
       name   => 'MpsSvc',
       enable => true
     }
   } else {
     service { 'Windows_firewall':
-      ensure => $service_state,
+      ensure => $service_status,
       name   => 'MpsSvc',
+      enable => false
     }
   }
+  */
 
 }
