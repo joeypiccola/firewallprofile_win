@@ -47,8 +47,10 @@ class firewallprofile_win (
 
   if $service_startup_type == 'disabled'  {
     notice ( "service_startup_type is $service_startup_type, overriding service_status to $service_status" )
-    $service_status = 'stopped'
-  }      
+    $_service_status = 'stopped'
+  } else {
+    $_service_status = 'running'
+  }
 
   case $standard_profile {
     'disabled': {
@@ -105,27 +107,9 @@ class firewallprofile_win (
   }
 
   service { 'Windows_firewall':
-    ensure => $service_status,
+    ensure => $_service_status,
     name   => 'MpsSvc',
     enable => $enabled
   }
-
- /*
-  # if the service is true then ensure the service is running and enabled
-  # if the service is false, simply ensure it's stopped and not disabled (disabling this service is bad form)
-  if $service_status == 'started' {
-    service { 'Windows_firewall':
-      ensure => $service_status,
-      name   => 'MpsSvc',
-      enable => true
-    }
-  } else {
-    service { 'Windows_firewall':
-      ensure => $service_status,
-      name   => 'MpsSvc',
-      enable => false
-    }
-  }
-  */
 
 }
