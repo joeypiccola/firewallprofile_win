@@ -38,10 +38,10 @@ class firewallprofile_win (
 ){
 
   # parameter validation
-  validate_bool($standard_profile)
-  validate_bool($domain_profile)
-  validate_bool($public_profile)
-  validate_re($service,['^(running|stopped)$'])
+  validate_re($standard_profile,['^(enabled|disabled)$'])
+  validate_re($domain_profile,['^(enabled|disabled)$'])
+  validate_re($public_profile,['^(enabled|disabled)$'])
+  validate_re($service_state,['^(running|stopped)$'])
 
   case $standard_profile {
     'disabled': {
@@ -100,8 +100,8 @@ class firewallprofile_win (
   }
 
   service { 'Windows_firewall':
-    ensure  => $service_state,
-    name    => 'MpsSvc',
+    ensure => $service_state,
+    name   => 'MpsSvc',
   }
 
 }
