@@ -99,9 +99,19 @@ class firewallprofile_win (
     data   => $public_profile_data,
   }
 
-  service { 'Windows_firewall':
-    ensure => $service_state,
-    name   => 'MpsSvc',
+  # if the service is true then ensure the service is running and enabled
+  # if the service is false, simply ensure it's stopped and not disabled (disabling this service is bad form)
+  if $service_state {
+    service { 'Windows_firewall':
+      ensure => $service_state,
+      name   => 'MpsSvc',
+      enable => true
+    }
+  } else {
+    service { 'Windows_firewall':
+      ensure => $service_state,
+      name   => 'MpsSvc',
+    }
   }
 
 }
