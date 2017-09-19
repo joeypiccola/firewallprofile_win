@@ -30,9 +30,10 @@
 #
 class firewallprofile_win (
 
-  $standard_profile = true,
-  $domain_profile   = true,
-  $public_profile   = true,
+  $standard_profile = 'enabled',
+  $domain_profile   = 'enabled',
+  $public_profile   = 'enabled',
+  $service_state    = 'running'
 
 ){
 
@@ -40,24 +41,45 @@ class firewallprofile_win (
   validate_bool($standard_profile)
   validate_bool($domain_profile)
   validate_bool($public_profile)
+  validate_re($service,['^(running|stopped)$'])
 
-  if $standard_profile {
-    $standard_profile_value = 0
-  } else {
-    $standard_profile_value = 1
+  case $standard_profile {
+    'disabled': {
+      $standard_profile_data = 0
+	}
+	default: {
+      $standard_profile_data = 1
+	}
   }
 
-  if $domain_profile {
-    $domain_profile_value = 0
-  } else {
-    $domain_profile_value = 1
+  case $domain_profile {
+    'disabled': {
+      $domain_profile_data = 0
+	}
+	default: {
+      $domain_profile_data = 1
+	}
   }
 
-  if $public_profile {
-    $public_profile_value = 0
-  } else {
-    $public_profile_value = 1
+  case $public_profile {
+    'disabled': {
+      $public_profile_data = 0
+	}
+	default: {
+      $public_profile_data = 1
+	}
   }
+  
+  /*
+  case $service_state {
+    'stopped': {
+      $enabled = false
+	}
+	default: {
+      $enabled = true
+	}
+  }
+  */
 
   registry_value { 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\EnableFirewall':
     ensure => present,
@@ -75,6 +97,11 @@ class firewallprofile_win (
     ensure => present,
     type   => dword,
     data   => $public_profile_value,
+  }
+
+  service { 'Windows_firewall':
+    ensure  => $service_state,
+    name    => 'MpsSvc',
   }
 
 }
