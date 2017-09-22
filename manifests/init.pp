@@ -54,28 +54,28 @@ class firewallprofile_win (
 
   case $standard_profile {
     'disabled': {
-      $standard_profile_data = 1
+      $standard_profile_data = 0
 	}
 	default: {
-      $standard_profile_data = 0
+      $standard_profile_data = 1
 	}
   }
 
   case $domain_profile {
     'disabled': {
-      $domain_profile_data = 1
+      $domain_profile_data = 0
 	}
 	default: {
-      $domain_profile_data = 0
+      $domain_profile_data = 1
 	}
   }
 
   case $public_profile {
     'disabled': {
-      $public_profile_data = 1
+      $public_profile_data = 0
 	}
 	default: {
-      $public_profile_data = 0
+      $public_profile_data = 1
 	}
   }
   
