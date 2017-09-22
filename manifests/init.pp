@@ -46,7 +46,7 @@ class firewallprofile_win (
   validate_re($service_startup_type,['^(automatic|disabled)$'])
 
   if $service_startup_type == 'disabled'  {
-    notice ( "service_startup_type is $service_startup_type, overriding service_status to $service_status" )
+    notice ( "service_startup_type is ${service_startup_type}, overriding service_status to ${service_status}" )
     $_service_status = 'stopped'
   } else {
     $_service_status = 'running'
@@ -55,37 +55,37 @@ class firewallprofile_win (
   case $standard_profile {
     'disabled': {
       $standard_profile_data = 0
-	}
-	default: {
+  }
+  default: {
       $standard_profile_data = 1
-	}
+  }
   }
 
   case $domain_profile {
     'disabled': {
       $domain_profile_data = 0
-	}
-	default: {
+  }
+  default: {
       $domain_profile_data = 1
-	}
+  }
   }
 
   case $public_profile {
     'disabled': {
       $public_profile_data = 0
-	}
-	default: {
-      $public_profile_data = 1
-	}
   }
-  
+  default: {
+      $public_profile_data = 1
+  }
+  }
+
   case $service_startup_type {
     'disabled': {
       $enabled = false
-	}
-	default: {
+  }
+  default: {
       $enabled = true
-	}
+  }
   }
 
   registry_value { 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\EnableFirewall':
