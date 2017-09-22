@@ -56,54 +56,58 @@ class firewallprofile_win (
     'disabled': {
       $standard_profile_data = 0
   }
-  default: {
+    default: {
       $standard_profile_data = 1
-  }
+    }
   }
 
   case $domain_profile {
     'disabled': {
       $domain_profile_data = 0
   }
-  default: {
+    default: {
       $domain_profile_data = 1
-  }
+    }
   }
 
   case $public_profile {
     'disabled': {
       $public_profile_data = 0
   }
-  default: {
+    default: {
       $public_profile_data = 1
-  }
+    }
   }
 
   case $service_startup_type {
     'disabled': {
       $enabled = false
   }
-  default: {
+    default: {
       $enabled = true
-  }
-  }
-
-  registry_value { 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\EnableFirewall':
-    ensure => present,
-    type   => dword,
-    data   => $standard_profile_data,
+    }
   }
 
-  registry_value { 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\EnableFirewall':
-    ensure => present,
-    type   => dword,
-    data   => $domain_profile_data,
-  }
-
-  registry_value { 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\EnableFirewall':
-    ensure => present,
-    type   => dword,
+  registry_value { 'EnableFirewallDomainProfile':
+    ensure => 'present',
+    notify => Service['Windows_firewall'],
+    path   => 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\EnableFirewall',
+    type   => 'dword',
     data   => $public_profile_data,
+  }
+  registry_value { 'EnableFirewallPublicProfile':
+    ensure => 'present',
+    notify => Service['Windows_firewall'],
+    path   => 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\EnableFirewall',
+    type   => 'dword',
+    data   => $public_profile_data,
+  }
+  registry_value { 'EnableFirewallStandardProfile':
+    ensure => 'present',
+    notify => Service['Windows_firewall'],
+    path   => 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\EnableFirewall',
+    type   => 'dword',
+    data   => $standard_profile_data,
   }
 
   service { 'Windows_firewall':
