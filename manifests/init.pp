@@ -30,10 +30,10 @@
 #
 class firewallprofile_win (
 
-  $standard_profile    = 'enabled',
-  $domain_profile      = 'enabled',
-  $public_profile      = 'enabled',
-  $service_status      = 'running',
+  $standard_profile     = 'enabled',
+  $domain_profile       = 'enabled',
+  $public_profile       = 'enabled',
+  $service_status       = 'running',
   $service_startup_type = 'automatic',
 
 ){
