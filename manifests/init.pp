@@ -93,7 +93,7 @@ class firewallprofile_win (
     type   => dword,
     data   => $standard_profile_data,
   }
-  
+
   registry_value { 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\EnableFirewall':
     ensure => present,
     type   => dword,
