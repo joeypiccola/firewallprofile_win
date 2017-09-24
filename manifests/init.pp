@@ -93,7 +93,7 @@ class firewallprofile_win (
     notify => Service['Windows_firewall'],
     path   => 'HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\EnableFirewall',
     type   => 'dword',
-    data   => $public_profile_data,
+    data   => $domain_profile_data,
   }
   registry_value { 'EnableFirewallPublicProfile':
     ensure => 'present',
